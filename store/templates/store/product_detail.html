@@ -1,0 +1,173 @@
+{% extends 'main.html'%}
+
+{% block content%}
+
+{% load cart %}
+{% load custom_filter %}
+<!-- {% load static %}
+
+<script src="{% static 'helper.js' %}"></script> -->
+<script>
+    $(document).ready(function(){
+        var temp = parseInt($('#quantity-span').html())
+        if (temp < 1)
+        {
+        $('#cart-form-plus, #quantity-div, #removeItem, #cart-form-minus').hide();
+        $('#cart-form-add').show();
+        }else{
+        $('#cart-form-plus,#quantity-div,#cart-form-minus, #removeItem').show();
+        $('#cart-form-add').hide();
+            
+        }
+        
+    $(document).on("submit","#cart-form-minus",function(event){
+        var temp = parseInt($('#quantity-span').html())-1
+        if (temp <1) temp=0; 
+        // console.log(temp)
+          event.preventDefault();
+        //   console.log("entered in decrement")
+          $.ajax({
+            type:'POST',
+        url:"{% url 'addToCart' product.id category.slug%}",
+        data:{
+            product:$('#productID').val(),
+            remove:$('#remove').val(),
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+            action: 'post',
+            success: function()
+            {
+               if(temp == 0){
+                   $('#cart-form-minus, #removeItem, #cart-form-plus, #quantity-div').hide()
+                   $('#cart-form-add').show()
+               } 
+               else  $('#quantity-span').html(temp)   
+            //   alert("Product quantity decreased")
+            //   document.getElementById("form-div").reset();
+            }
+        }
+        });
+    });
+
+    // inrement quantity
+    $(document).on("submit","#cart-form-plus",function(event){
+        var temp = parseInt($('#quantity-span').html())+1
+        // console.log(typeof(temp));
+        if (temp =>1) $('#cart-form-minus').show()
+          event.preventDefault();
+        //   console.log("entered in increment")
+          
+          $.ajax({
+              
+            type:'POST',
+            url:"{% url 'addToCart' product.id category.slug%}",
+            data:{
+            product:$('#productID').val(),
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+            action: 'post',
+            success: function(json)
+            {  
+            $('#quantity-span').html(temp)    
+            // alert("Product qauantity increased")
+            
+            }
+        }
+        });
+    });
+
+    // add to cart
+    $(document).on("submit","#cart-form-add",function(event){
+        var temp = parseInt($('#quantity-span').html())
+        console.log(temp)
+        temp = 1
+        console.log(temp)
+          event.preventDefault();
+          console.log("entered in add to cart")
+          $.ajax({
+            type:'POST',
+            url:"{% url 'addToCart' product.id category.slug%}",
+            data:{
+            product:$('#productID').val(),
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+            action: 'post',
+            success: function()
+            {
+            alert("Product added to cart")
+            $('#quantity-div, #removeItem, #cart-form-minus, #cart-form-plus').show();
+            $('#cart-form-add').hide();
+            $('#quantity-span').html(temp);
+
+            }
+        }
+        });
+    });
+
+
+    // remove button
+    $(document).on("click","#removeItem",function(event){
+          event.preventDefault();
+        //   console.log("removed from cart")
+          $.ajax({
+            type:'POST',
+            url:"{%url 'removeItem' product.id category.name %}",
+            data:{
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+            action: 'post',
+            success: function()
+            {
+            // alert("product removed")
+            $('#quantity-div, #cart-form-minus, #cart-form-plus, #removeItem').hide();
+            $('#cart-form-add').show()
+            
+            }
+        }
+        });
+    });
+
+
+
+    })
+    
+    </script>
+
+
+<button><a href="/">Go to Home</a></button>
+<br>
+<h5>{{product.name}}</h5>
+<small>Rs. {{product.price}} only</small>
+<p>{{product.description}}</p>
+<img src="{{product.image.url }}" alt="" width="100" height="100">
+
+<p>Belongs to Collection: {{category.name}}</p>
+
+<!-- Add to Cart functionality added here -->
+<div id="form-div" class="row no-gutters">
+    <form id="cart-form-minus" class="col-2 " method="post">
+        {% csrf_token %}
+        <input hidden type="text" id="productID" name='product' value='{{product.id}}'>
+        <input hidden type="text" id="remove" name='remove' value='True'>
+        <input type="submit" value=" - " class="add-to-cart btn btn-block btn-success border-right">
+    </form>
+    <div id="quantity-div" class="text-center col btn btn-success">
+    <span id="quantity-span">{{product|cart_quantity:request.session.cart}}</span> in Cart </div>
+    <form id="cart-form-plus" action="{% url 'addToCart' product.id category.slug%}" class="col-2 " method="post">
+        {% csrf_token %}
+        <input hidden type="text" id="productID" name='product' value='{{product.id}}'>
+        <input type="submit" value=" + " class="add-to-cart btn btn-block btn-success border-left">
+    </form>
+</div>
+
+<br>
+<form id="cart-form-add" method="POST" class="btn-block">
+    {% csrf_token %}
+    <input hidden type="text" id="productID" name='product' value='{{product.id}}'>
+    <input type="submit" class="add-to-cart float-right btn btn-success form-control" value="Add To Cart">
+</form>
+<button id="removeItem"><a>RemoveItem</a></button>
+<br>
+
+<br>
+<br>
+
+
+
+{% endblock content%}

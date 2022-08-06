@@ -1,0 +1,22 @@
+{% extends 'main.html'%}
+
+{% block content%}
+
+{% for category in categories%}
+    <h5>{{category.name}}</h5>
+    <hr>
+    <div>
+    {% for product in products %}
+    {% if product.category.id == category.id%}
+        <a href="{% url 'product' product.id category.slug%}">{{product.name}}</a>
+        <small>Rs. {{product.price}} only</small>
+        <p>{{product.description}}</p>
+        <a href="{% url 'product' product.id category.slug%}">
+            <img src="{{product.image.url }}" alt="{product.name}}" width="100px" height="80px"></a>
+        <br><br>    
+    {%endif%}
+    {%endfor%}
+    </div>
+<hr>
+{%endfor%}
+{% endblock content%}
