@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 import os
 from pathlib import Path
-
+from dotenv import load_dotenv
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -106,10 +107,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # email settings
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'mtahirhaq1@gmail.com'
+EMAIL_HOST = str(os.getenv('EMAIL_HOST'))
+EMAIL_HOST_USER = str(os.getenv('EMAIL_HOST_USER'))
 # sixteen digit app pasword created by google
-EMAIL_HOST_PASSWORD = 'xygvosfgjqhjdjdn'
+EMAIL_HOST_PASSWORD = str(os.getenv('EMAIL_HOST_PASSWORD'))
 EMAIL_PORT = 587
 
 
@@ -140,6 +141,6 @@ MEDIA_ROOT = BASE_DIR
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Payment keys
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51LClRcAG3Maik77E6GI3D60Ov7a9THSUSMJfQuzuYaEnHFEt1zyu9jzoHy2jbqLBohONTR97v6Cz0dGJ2csHVQr500poq1u1ut'
-STRIPE_SECRET_KEY = 'sk_test_51LClRcAG3Maik77EzuTQPaGyQCRaz4XBspJn2A7Wh1cWpDJO7dkEO2MTETtikKI1ayR5L9zVLPDGq1NK0kGHCIlp00s6q1Y0cF'
-STRIPE_ENDPOINT_SECRET = 'whsec_58ddab91fd8e8aed495a075ef385f75ae6d2ffb2371f6ce256adcd6a5c050b98'
+STRIPE_PUBLISHABLE_KEY = str(os.getenv('STRIPE_PUBLISHABLE_KEY'))
+STRIPE_SECRET_KEY = str(os.getenv('STRIPE_SECRET_KEY'))
+STRIPE_ENDPOINT_SECRET = str(os.getenv('STRIPE_ENDPOINT_SECRET'))

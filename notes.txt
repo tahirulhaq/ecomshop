@@ -1,7 +1,0 @@
-configure stripe
-
-https://testdriven.io/blog/django-stripe-tutorial/
-
-Stripe CLI
-
-https://stripe.com/docs/stripe-cli#install
