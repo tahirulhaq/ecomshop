@@ -9,3 +9,16 @@ Contains
 4) ViewCart
 5) View Order
 6) Order Delete
+
+
+> store sensitive information in .env
+
+https://dev.to/earthcomfy/django-how-to-keep-secrets-safe-with-python-dotenv-5811
+
+> configure stripe
+
+https://testdriven.io/blog/django-stripe-tutorial/
+
+> Stripe CLI to get webhook key
+
+https://stripe.com/docs/stripe-cli#install
