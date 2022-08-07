@@ -1,4 +1,4 @@
-# ecomshop with Python Django and Stripe integration
+# Ecomshop with Python Django and Stripe integration
 
 Complete ecommerce shop made with python django
 
